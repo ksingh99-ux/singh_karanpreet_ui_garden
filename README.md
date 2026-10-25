@@ -1,149 +1,171 @@
 # Coding Assignment 12: Web Component Library
 
-A small UI component library made with Create React App, TypeScript, styled-components
-and Storybook. The final site (a page showing every component) runs inside a docker
-container on localhost:8083.
+A small component library made with React, TypeScript, styled-components and Storybook. The final site runs in a docker container on localhost:8083 (127.0.0.1:8083).
 
-## what is needed
+## What I need installed
 
-- Node.js (version 20 or newer) and npm
-- Docker Desktop, installed and running
+- Node.js (version 20 or newer)
+- Docker Desktop (open and running)
 - Git
 
-## the components
+## Set up the project
 
-Button, Label, Text, Table, TableHeader, TableRow, TableCell, TableFooter, Dropdown,
-RadioButton, Img, HeroImage and Card.
+Go into the project folder and install the packages
 
-Every component has a default state and a disabled state. When disabled, it turns grey
-and the cursor changes to "not-allowed". All of them use styled-components and are
-responsive (they change layout on small screens).
+```
+cd singh_karanpreet_ui_garden
+npm install
+```
 
-Each component folder in src/components has these 5 files (example for Button):
+## How I made it
 
-- Button.tsx
-- Button.stories.tsx
-- Button.types.tsx
-- Button.tests.tsx
-- index.ts
+1. Made the react app with typescript and went into the folder
 
-## how I built this project
+```
+cd C:\projects
+npx create-react-app singh_karanpreet_ui_garden --template typescript
+cd singh_karanpreet_ui_garden
+```
 
-1. Made a new react app with typescript:
-   npx create-react-app singh_karanpreet_ui_garden --template typescript
+2. Installed styled-components and the testing packages
 
-2. Went into the folder:
-   cd singh_karanpreet_ui_garden
+```
+npm install styled-components
+npm install --save-dev @types/styled-components jest-styled-components
+```
 
-3. Installed styled-components and the testing helper:
-   npm install styled-components
-   npm install --save-dev @types/styled-components jest-styled-components
+3. Added storybook. It asks 2 questions, I picked "No" for onboarding and "Minimal" for the configuration
 
-4. Added storybook (picked "No" for onboarding and "Minimal" for configuration):
-   npx storybook@latest init
+```
+npx storybook@latest init
+```
 
-5. Deleted the example stories storybook made (src/stories) and made my own
-   components in src/components, one folder per component.
+4. Deleted the example stories that storybook made
 
-6. In tsconfig.json I added an "exclude" for the story files so the production
-   build doesn't type check them (storybook handles those itself).
+```
+rmdir /s /q src\stories
+```
 
-7. In package.json I changed the test script so it finds my .tests.tsx files:
-   "test": "react-scripts test --watchAll=false --testMatch \"**/*.tests.tsx\""
+5. In tsconfig.json I added an exclude at the bottom so the build skips the story files
 
-8. Made src/App.tsx a page that shows every component in its default and disabled state.
-   This is the page the docker container serves.
+```
+"include": [
+  "src"
+],
+"exclude": [
+  "src/**/*.stories.tsx"
+]
+```
 
-9. Made a Dockerfile and a .dockerignore file in the main project folder.
+6. Made the 13 components inside src/components, one folder for each
 
-10. Built the image, ran the container and checked localhost:8083.
+7. Deleted the default test, because I changed App
 
-11. Pushed the whole project to github.
+```
+del src\App.test.tsx
+```
 
-## run storybook (port 6006)
+8. In package.json I changed the test script so it finds my .tests.tsx files
 
-    npm run storybook
+```
+"test": "react-scripts test --watchAll=false --testMatch \"**/*.tests.tsx\""
+```
 
-Then open http://localhost:6006 in the browser. Click a component on the left and use
-the Controls panel at the bottom to change the text, the background color and the
-disabled value. Every component has a Default story and a Disabled story.
-Press Ctrl + C in the terminal to stop it.
+9. Changed src/App.tsx so it shows every component, normal and disabled. This is the page the docker container shows
 
-Storybook uses 6006 (its default port). The final site in docker uses 8083.
+10. Made the Dockerfile and the .dockerignore file in the main project folder
 
-## run the tests
+## Run storybook
 
-    npm test
+```
+npm run storybook
+```
 
-This runs every .tests.tsx file once. Each component has 2 tests:
+Open localhost:6006. Click a component on the left, then click Default or Disabled. Use the Controls panel at the bottom to change the text, the background color and disabled. Press Ctrl + C in the terminal to stop it.
 
-- a test that checks the component is visible
-- a test that checks the background color changes when the component is disabled
+## Run the tests
 
-## run the site without docker (optional)
+```
+npm test
+```
 
-    npm start
+14 test suites and 27 tests pass.
 
-This opens the dev version on localhost:3000.
+## Check the production build
 
-## docker: build and run (port 8083)
+```
+npm run build
+```
 
-The Dockerfile makes a production build of the app (npm run build) and serves it.
+It should say "Compiled successfully".
 
-1. Build the image (don't forget the dot at the end):
+## Run the site on localhost:8083
 
-       docker build -t singh_karanpreet_coding_assignment12 .
+Open Docker Desktop first, then in the project folder run
 
-2. Run the container:
+```
+docker build -t singh_karanpreet_coding_assignment12 .
+docker run -d -p 8083:8083 --name singh_karanpreet_coding_assignment12 singh_karanpreet_coding_assignment12
+```
 
-       docker run -d -p 8083:8083 --name singh_karanpreet_coding_assignment12 singh_karanpreet_coding_assignment12
+What the commands do:
+- the dot at the end of docker build means use the Dockerfile in this folder
+- -t gives the image a name
+- -d runs the container in the background
+- -p 8083:8083 connects port 8083 on my computer to port 8083 in the container
+- --name gives the container its name
 
-3. Open http://localhost:8083 in the browser. You should see the UI Garden page with
-   all 13 components.
+Then open localhost:8083 (or 127.0.0.1:8083) in the browser. The page shows all the components.
 
-Other docker commands:
+Check that it is running
 
-    docker ps                                          (see running containers)
-    docker stop singh_karanpreet_coding_assignment12   (stop it)
-    docker start singh_karanpreet_coding_assignment12  (start it again)
-    docker rm singh_karanpreet_coding_assignment12     (remove it, stop it first)
-    docker images                                      (see the images)
+```
+docker ps
+```
 
-## how to run it yourself
+Stop it
 
-1. Clone the repo:
-   git clone https://github.com/ksingh99-ux/singh_karanpreet_ui_garden.git
+```
+docker stop singh_karanpreet_coding_assignment12
+```
 
-2. Go into the folder:
-   cd singh_karanpreet_ui_garden
+Start it again
 
-3. Build the image:
-   docker build -t singh_karanpreet_coding_assignment12 .
+```
+docker start singh_karanpreet_coding_assignment12
+```
 
-4. Run the container:
-   docker run -d -p 8083:8083 --name singh_karanpreet_coding_assignment12 singh_karanpreet_coding_assignment12
+Remove it and start fresh (after changing code)
 
-5. Open localhost:8083 (or 127.0.0.1:8083) in your browser
+```
+docker stop singh_karanpreet_coding_assignment12
+docker rm singh_karanpreet_coding_assignment12
+docker build -t singh_karanpreet_coding_assignment12 .
+docker run -d -p 8083:8083 --name singh_karanpreet_coding_assignment12 singh_karanpreet_coding_assignment12
+```
 
-## checking the assignment requirements
+## Push to github
 
-- create react app + storybook: package.json and the .storybook folder
-- all 13 components: src/components
-- 5 files in each component folder: .tsx, .stories.tsx, .types.tsx, .tests.tsx, index.ts
-- styled-components for styling: every component file uses it
-- responsive: every component has a @media rule for small screens
-- storybook controls: text, background color and disabled controls in every story
-- default and disabled state: every component has a Default and a Disabled story,
-  disabled turns grey and shows the not-allowed cursor
-- 2 tests per component: npm test
-- Dockerfile with production build: runs npm run build and serves the build folder
-- container name: singh_karanpreet_coding_assignment12
-- working directory: /singh_karanpreet_ui_garden
-- site on localhost:8083
+First time (I made an empty repo on github first, then used its link)
 
-## project details
+```
+git add .
+git commit -m "Coding Assignment 12"
+git branch -M main
+git remote add origin <repo url>
+git push -u origin main
+```
 
-- container name: singh_karanpreet_coding_assignment12
-- workdir inside the container: singh_karanpreet_ui_garden
-- site port: 8083
-- storybook port: 6006
+After changing something
+
+```
+git add .
+git commit -m "describe the change"
+git push
+```
+
+## The 13 components
+
+Button, Label, Text, Table, TableHeader, TableRow, TableCell, TableFooter, Dropdown, RadioButton, Img, HeroImage and Card.
+
+Each component folder has 5 files, for example Button has Button.tsx, Button.stories.tsx, Button.types.tsx, Button.tests.tsx and index.ts.

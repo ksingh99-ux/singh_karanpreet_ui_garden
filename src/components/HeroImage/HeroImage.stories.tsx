@@ -13,19 +13,19 @@ export default {
 };
 
 export const Default = {
-  args: {
-    title: 'Welcome to the UI Garden',
-    text: 'A small library of react components',
-    backgroundColor: '#1976d2',
-    disabled: false,
+  args:{
+    title:"Welcome to the UI Garden",
+    text:'A small library of react components',
+    backgroundColor:'#1976d2',
+    disabled:false,
   },
 };
 
 export const Disabled = {
-  args: {
-    title: 'Welcome to the UI Garden',
-    text: 'A small library of react components',
-    backgroundColor: '#1976d2',
-    disabled: true,
+  args:{
+    title:"Welcome to the UI Garden",
+    text:'A small library of react components',
+    backgroundColor:'#1976d2',
+    disabled:true,
   },
 };
